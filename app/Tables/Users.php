@@ -68,12 +68,16 @@ class Users extends AbstractTable
         $table
         ->withGlobalSearch(columns: ['id', 'username', 'fist_name', 'last_name', 'email'])
         ->defaultSort('id')
-        ->column('id', searchable: true, sortable: true)
+        ->column('id', searchable: true, sortable: true, canBeHidden: false)
         ->column(key: 'username', searchable: true, sortable: true, canBeHidden: false)
-        ->column(key: 'first_name', searchable: true, sortable: true, canBeHidden: false)
-        ->column(key: 'last_name', searchable: true, sortable: true, canBeHidden: false)
+        ->column(key: 'first_name', searchable: true, sortable: true, hidden: true)
+        ->column(key: 'last_name', searchable: true, sortable: true, hidden: true)
         ->column(key: 'email', searchable: true, sortable: true)
-        ->column('action')
+        ->column(key: 'created_ at', searchable: true, sortable: true)
+        // ->rowLink(function(User $user) {
+        //     return route('admin.users.edit', $user);
+        // })
+        ->column('action', alignment: 'right', canBeHidden: false)
         ->paginate(15);
     }
 }
