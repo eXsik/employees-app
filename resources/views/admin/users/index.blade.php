@@ -14,10 +14,16 @@
     </div>
     <x-splade-table :for="$users">
         @cell('action', $user)
-            <Link href="{{ route('admin.users.edit', $user) }}"
-                class="py-1.5 px-2.5 rounded-md text-blue-500 hover:text-blue-600 tranition font-semibold">
-            Edit
-            </Link>
+            <div class="space-x-1">
+                <Link href="{{ route('admin.users.edit', $user) }}"
+                    class="py-1.5 px-2.5 rounded-md text-blue-500 hover:text-blue-600 tranition font-semibold">
+                Edit
+                </Link>
+                <Link href="{{ route('admin.users.destroy', $user) }}" method="DELETE" confirm="Are you sure you want to delete this user?" confirm-button="Yes" cancel-button="No" confirm-danger
+                    class="py-1.5 px-2.5 rounded-md text-red-500 hover:text-red-600 tranition font-semibold">
+                Delete
+                </Link>
+            </div>
         @endcell
     </x-splade-table>
 </x-admin-layout>
