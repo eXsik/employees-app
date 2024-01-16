@@ -75,7 +75,7 @@
                         <span class="mx-2 text-sm font-medium">States</span>
                     </Link>
                     <Link class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                        href="/admin/states">
+                        href="/admin/cities">
                         <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
