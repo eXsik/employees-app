@@ -7,10 +7,10 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StateController;
-use Spatie\Permission\Contracts\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ Route::middleware('splade')->group(function () {
         Route::resource('/departments', DepartmentController::class);
         Route::resource('/employees', EmployeeController::class);
         Route::resource('/roles', RoleController::class);
-        Route::resource('/permissions', Permission::class);
+        Route::resource('/permissions', PermissionController::class);
     });
 
     require __DIR__.'/auth.php';
