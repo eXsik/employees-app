@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="flex justify-between">
-        <h1 class="text-3xl font-medium p-4">States</h1>
+        <h1 class="text-3xl font-medium py-4">States</h1>
         <div class="py-4">
             <Link href="{{ route('admin.states.create') }}"
                 class="flex items-center justify-center shadow-md py-1.5 px-2.5 rounded-md text-white bg-blue-500 hover:bg-blue-600 tranition font-semibold">
