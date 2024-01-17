@@ -8,7 +8,9 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StateController;
+use Spatie\Permission\Contracts\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +50,7 @@ Route::middleware('splade')->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
-    Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
+    Route::middleware('auth', 'role:admin')->prefix('/admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::resource('/users', UserController::class);
         Route::resource('/countries', CountryController::class);
@@ -56,6 +58,8 @@ Route::middleware('splade')->group(function () {
         Route::resource('/cities', CityController::class);
         Route::resource('/departments', DepartmentController::class);
         Route::resource('/employees', EmployeeController::class);
+        Route::resource('/roles', RoleController::class);
+        Route::resource('/permissions', Permission::class);
     });
 
     require __DIR__.'/auth.php';

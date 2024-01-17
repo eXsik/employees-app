@@ -2,15 +2,16 @@
 
 namespace App\Tables;
 
-use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
 use Spatie\QueryBuilder\QueryBuilder;
 use ProtoneMedia\Splade\AbstractTable;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\Permission\Models\Role as ModelsRole;
 
-class Users extends AbstractTable
+class Roles extends AbstractTable
 {
     /**
      * Create a new instance.
@@ -43,20 +44,15 @@ class Users extends AbstractTable
             $query->where(function ($query) use ($value) {
                 Collection::wrap($value)->each(function ($value) use ($query) {
                     $query
-                        ->orWhere('username', 'LIKE', "%{$value}%")
-                        ->orWhere('first_name', 'LIKE', "%{$value}%")
-                        ->orWhere('last_name', 'LIKE', "%{$value}%")
-                        ->orWhere('email', 'LIKE', "%{$value}%");
+                        ->orWhere('name', 'LIKE', "%{$value}%"); 
                 });
             });
         });
 
-        return QueryBuilder::for(User::whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'admin');
-        }))
+        return QueryBuilder::for(ModelsRole::class::where('name', '!=', 'admin'))
             ->defaultSort('id')
-            ->allowedSorts(['id', 'username', 'first_name', 'last_name', 'email', 'created_at'])
-            ->allowedFilters(['username', 'first_name', 'last_name', 'email', $globalSearch]);
+            ->allowedSorts(['id', 'name'])
+            ->allowedFilters(['name', $globalSearch]);
     }
 
     /**
@@ -68,17 +64,10 @@ class Users extends AbstractTable
     public function configure(SpladeTable $table)
     {
         $table
-        ->withGlobalSearch(columns: ['id', 'username', 'fist_name', 'last_name', 'email'])
+        ->withGlobalSearch(columns: ['name', 'country.name'])
         ->defaultSort('id')
-        ->column('id', searchable: true, sortable: true, canBeHidden: false)
-        ->column(key: 'username', searchable: true, sortable: true, canBeHidden: false)
-        ->column(key: 'first_name', searchable: true, sortable: true, hidden: true)
-        ->column(key: 'last_name', searchable: true, sortable: true, hidden: true)
-        ->column(key: 'email', searchable: true, sortable: true)
-        ->column(key: 'created_ at', searchable: true, sortable: true)
-        // ->rowLink(function(User $user) {
-        //     return route('admin.users.edit', $user);
-        // })
+        ->column('id', sortable: true)
+        ->column(key: 'name', searchable: true, sortable: true)
         ->column('action', alignment: 'right', canBeHidden: false)
         ->paginate(15);
     }
