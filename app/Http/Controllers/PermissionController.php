@@ -7,6 +7,7 @@ use ProtoneMedia\Splade\Facades\Splade;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\PermissionStoreRequest;
 use App\Http\Requests\PermissionUpdateRequest;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -24,7 +25,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('admin.permissions.create');
+        return view('admin.permissions.create', ['roles' => Role::pluck('name', 'id')->toArray()]);
     }
 
 
@@ -33,7 +34,9 @@ class PermissionController extends Controller
      */
     public function store(PermissionStoreRequest $request)
     {
-        Permission::create($request->validated());
+        $permission = Permission::create($request->validated());
+        $roles = Role::whereIn('id', $request->roles)->get();
+        $permission->syncRoles($roles);        
         Splade::toast('Role created successfully')->autoDismiss(3);
 
         return to_route('admin.permissions.index');
@@ -44,7 +47,9 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        return view('admin.permissions.edit', compact('permission'));
+        $roles = Role::pluck('name', 'id')->toArray();
+
+        return view('admin.permissions.edit', compact('permission', 'roles'));
     }
 
     /**
@@ -53,6 +58,8 @@ class PermissionController extends Controller
     public function update(PermissionUpdateRequest $request, Permission $permission)
     {
         $permission->update($request->validated());
+        $roles = Role::whereIn('id', $request->roles)->get();
+        $permission->syncRoles($roles);
         Splade::toast('Permission updated successfully')->autoDismiss(3);
 
         return to_route('admin.permissions.index');

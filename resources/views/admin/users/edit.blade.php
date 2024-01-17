@@ -6,6 +6,8 @@
         <x-splade-input name="first_name" label="First name" />
         <x-splade-input name="last_name" label="Last name" />
         <x-splade-input name="email" label="Email address" />
+        <x-splade-select name="roles[]" label="Roles" :options="$roles" multiple relation choices />
+        <x-splade-select name="permissions[]" label="Permissions" :options="$permissions" multiple relation choices />
 
         <x-splade-submit class="mt-2 bg-blue-400 hover:bg-blue-500 transition text-white" label="Update" />
     </x-splade-form>

@@ -3,6 +3,7 @@
     <x-splade-form :action="route('admin.permissions.update', $permission)" method="PUT" class="grid grid-cols-1 gap-4 p-4 bg-white rounded-md"
         :default="$permission">
         <x-splade-input name="name" label="Name" />
+        <x-splade-select name="roles[]" :options="$roles" multiple relation choices />
 
         <x-splade-submit class="mt-2 bg-blue-400 hover:bg-blue-500 transition text-white" label="Update" />
     </x-splade-form>

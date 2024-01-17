@@ -10,6 +10,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\View\View as ViewView;
 use ProtoneMedia\Splade\Facades\Splade;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -28,7 +30,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $permissions = Permission::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('name', 'id')->toArray();
+
+        return view('admin.users.create', compact('permissions', 'roles'));
     }
 
     /**
@@ -36,7 +41,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        User::create($request->validated());
+        $user =  User::create($request->validated());
+        $roles = Role::whereIn('id', $request->roles)->get();
+        $permissions = Role::whereIn('id', $request->permissions)->get();
+        $user->syncRoles($roles); 
+        $user->syncPermissions($permissions); 
         Splade::toast('User created successfully')->autoDismiss(3);
 
         return to_route('admin.users.index');
@@ -47,8 +56,10 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(User $user): View
-    {
-        return view('admin.users.edit', compact('user'));
+    {   $permissions = Permission::pluck('name', 'id')->toArray();
+        $roles = Role::pluck('name', 'id')->toArray();
+
+        return view('admin.users.edit', compact('user', 'permissions', 'roles'));
     }
 
     /**
@@ -57,6 +68,10 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->validated());
+        $roles = Role::whereIn('id', $request->roles)->get();
+        $permissions = Role::whereIn('id', $request->permissions)->get();
+        $user->syncRoles($roles); 
+        $user->syncPermissions($permissions); 
         Splade::toast('User updated successfully')->autoDismiss(3);
 
         return to_route('admin.users.index');
